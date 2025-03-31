@@ -1,9 +1,9 @@
 @extends('layouts.app_login')
 @section('content')
-<div class="w-layout-blockcontainer container-36 w-container">
+
+<div class="register-container">
     <h1>■新規ユーザー登録</h1>
-</div>
-<div class="w-layout-blockcontainer container-35 w-container">
+
     <div class="w-form">
         {{-- 各フォームのバリデーションが全て表示される
         @if ($errors->any())
@@ -52,7 +52,6 @@
             @enderror
             <label>パスワード確認</label>
             <input class="w-input" maxlength="256" name="password_confirmation" type="password">
-            <div class="div-block-4">
             @error('user_type')
             <div class="error">※{{ $message }}</div>
             @enderror
@@ -62,9 +61,9 @@
                     <option value="1">管理者</option>
                 </select>
                 <input type="hidden" name="tab" value="user">
-                <div class="div-block-11">
-                    <a href="{{ route('admin.index', ['tab' => request('tab', 'user')]) }}" class="button-17 w-button">戻る</a>
-                    <input type="submit" class="submit-button-6 w-button" value="登録">
+                <div class="button-container">
+                <button type="button" onclick="location.href='{{ route('admin.index', ['tab' => request('tab', 'user')]) }}'" class="back-button">戻る</button>
+                <input type="submit" class="submit-button" value="登録">
                 </div>
         </form>
     </div>

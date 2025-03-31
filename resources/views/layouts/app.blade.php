@@ -14,17 +14,17 @@
 </head>
 
 <body>
-
-    <!--ヘッダー画面のコンポーネント-->
-    <header>
+<header>
     <x-header />
     </header>
-    
+   
+
+    <main class="main-content">
     @yield('content')
-
- 
-
+    </main>
+    <footer>
     <x-footer />
+    </footer>
 </body>
 @yield('scripts')
 <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>

@@ -1,6 +1,6 @@
 @extends('layouts.app_login')
 @section('content')
-<body class="login-body">
+
 <div class="register-container" style=gap:20px;>
     <h1>登録情報確認</h1>
     <div class="l-form">
@@ -37,6 +37,6 @@
     </div>
 
 </div>
-</body>
+
 
 @endsection

@@ -1,4 +1,4 @@
-@foreach($news as $news)
+@foreach($news as $item)
 <div class="admin-container">
 
 
@@ -7,7 +7,7 @@
             <p>id</p>
         </div>
         <div class="category_content">
-            <p>{{ $news->id }}</p>
+            <p>{{ $item->id }}</p>
         </div>
 
     </div>
@@ -18,7 +18,7 @@
             <p>日付</p>
         </div>
         <div class="category_content">
-            <p>{{ $news->date }}</p>
+            <p>{{ $item->date }}</p>
 
         </div>
     </div>
@@ -29,7 +29,7 @@
             <p>カテゴリー</p>
         </div>
         <div class="category_content">
-            <a>{{ $news->category }}</a>
+            <a>{{ $item->category }}</a>
 
         </div>
     </div>
@@ -39,7 +39,7 @@
             <p>タイトル</p>
         </div>
         <div class="category_content">
-            <a>{{ $news->title }}</a>
+            <a>{{ $item->title }}</a>
 
         </div>
     </div>
@@ -49,10 +49,23 @@
             <p>詳細説明</p>
         </div>
         <div class="category_content">
-            <a>{{ $news->description }}</a>
+            <a>{{ $item->description }}</a>
         </div>
     </div>
+    <div class="category">
+        <div class="ed-container">
+            <button type="button" class="edit-button"
+                onclick="location.href='{{ route('admin.news.edit', ['id' => $item->id]) }}'">
+                編集
+            </button>
+            <form class="ed-form" action="{{ route('admin.news.delete', ['id' => $item->id]) }}" method="POST"
+                onsubmit="return confirm('本当に削除しますか？');">
 
- 
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="delete-button">削除</button>
+            </form>
+        </div>
+    </div>
 </div>
 @endforeach

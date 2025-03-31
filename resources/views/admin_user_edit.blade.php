@@ -1,9 +1,8 @@
 @extends('layouts.app_login')
 @section('content')  
-<div class="w-layout-blockcontainer container-36 w-container">
+
+<div class="register-container">
     <h1>■ユーザー編集</h1>
-</div>
-<div class="w-layout-blockcontainer container-35 w-container">
     <div class="w-form">
     @if ($errors->any())
         <div>
@@ -42,6 +41,7 @@
             @enderror
             <label>住所</label>
             <input class="w-input" maxlength="256" name="address" value="{{ old('address', $user->address) }}">
+            
             @error('user_type')
             <div class="error">※{{ $message }}</div>
             @enderror
@@ -51,9 +51,9 @@
             <option value="1" {{ old('user_type', $user->is_admin) == 1 ? 'selected' : '' }}>管理者</option>
             </select>
             <input type="hidden" name="tab" value="user">
-            <div class="div-block-11">
-            <a href="{{ route('admin.index', ['tab' => request('tab', 'user')]) }}" class="button-9 w-button">戻る</a>
-                <input type="submit" class="submit-button-6 w-button" value="更新">
+            <div class="button-container">
+            <button type="button" onclick="location.href='{{ route('admin.index', ['tab' => request('tab', 'user')]) }}'" class="back-button">戻る</button>
+            <input type="submit" class="submit-button" value="更新">
             </div>
         </form>
     </div>

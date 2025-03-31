@@ -1,10 +1,11 @@
 @extends('layouts.app_login')
 @section('content')
+
 <div class="register-container">
-    <h1>■新規ニュース登録</h1>
+    <h1>■ニュース編集</h1>
 
 <div class="w-form">
-<form action="{{ route('admin.news.add') }}" method="post" novalidate>
+<form action="{{ route('admin.news.update',$news->id) }}" method="post" novalidate>
     @csrf
     @error('date')
     <div class="error">※{{ $message }}</div>

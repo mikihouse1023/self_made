@@ -2,44 +2,51 @@
 
 @section('content')
 
-    <div style="display:flex;">
-        <h1 style="width:60%;margin:0 auto;">■注文内容</h1>
-    </div>
+
+        <h1>■注文内容</h1>
+
 
     <!-- カートの中身を表示 -->
     @if ($cartItems->isEmpty())
-        <p>カートに商品がありません。</p>
+        <p class="total-price">カートに商品がありません。</p>
     @else
-        <ul role="list" class="w-list-unstyled">
+        
             @foreach($cartItems as $item)
-                <li class="list-item">
+                <li class="cart-list">
                     <x-cart-item :item="$item" :delete="true" />
                 </li>
             @endforeach
-        </ul>
+       
+
+        @if(session('error'))
+    <div class="error">
+        {{ session('error') }}
+    </div>
+@endif
 
         {{-- ✅ クーポン適用フォーム --}}
-        <h3>使用可能なクーポン</h3>
+        
         <form action="{{ route('cart.applyCoupon') }}" method="POST">
             @csrf
             <label for="coupon">クーポンを選択:</label>
-            <select name="coupon_id" id="coupon" class="form-control">
+            <select name="coupon_id" id="coupon" class="dropdown">
                 <option value="">クーポンを使用しない</option> {{-- ✅ 常に表示 --}}
                 @foreach($coupons as $coupon)
                     <option value="{{ $coupon->id }}">{{ $coupon->code }} - 割引 {{ $coupon->discount_value }}円</option>
                 @endforeach
             </select>
-            <button type="submit" class="btn btn-primary mt-2">クーポンを適用</button>
+            <div class="one-button-container">
+            <button type="submit" class="applicable-button">クーポンを適用</button>
+            </div>
         </form>
-
     @endif
 
     {{-- ✅ 合計金額の表示 --}}
-    <div style="text-align:center; margin-top:20px;">
-    <h2>合計金額: <span id="total-price">
+  
+    <h1 class="total-price-container">合計金額: <span id class="total-price">
         {{ number_format($discountedTotal) }} 円
-    </span></h2>
-</div>
+    </span></h1>
+
 
 
     <div class="button-container" style="margin:0 auto;">

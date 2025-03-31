@@ -22,15 +22,15 @@
 <div class="tab-content">
   <div id="set_meal" class="w-tab-pane fade " style="{{ $tab === 'set_meal' ? 'display: block;' : 'display: none;' }}">
     <h1>■定食</h1>
-    <x-item :items="$set_meals" category="set_meal" />
+    <x-product :products="$set_meals" category="set_meal" />
   </div>
   <div id="dish" class="w-tab-pane fade " style="{{ $tab === 'dish' ? 'display: block;' : 'display: none;' }}">
     <h1>■丼・ラーメン</h1>
-    <x-item :items="$dishes" category="dishe" />
+    <x-product :products="$dishes" category="dishes" />
   </div>
   <div id="side_menu" class="w-tab-pane fade" style="{{ $tab === 'side_menu' ? 'display: block;' : 'display: none;' }}">
     <h1>■サイドメニュー</h1>
-    <x-item :items="$side_menus" category="side_menu" />
+    <x-product :products="$side_menus" category="side_menu" />
   </div>
 
 

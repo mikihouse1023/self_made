@@ -1,6 +1,6 @@
 @extends('layouts.app_login')
 @section('content')
-<body class="login-body">
+
 <div class="register-container">
     <h1>新規会員登録</h1>
 
@@ -57,6 +57,6 @@
     </div>
 
 </div>
-</body>
+
 
 @endsection

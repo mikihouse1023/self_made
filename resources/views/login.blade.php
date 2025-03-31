@@ -1,6 +1,6 @@
 @extends('layouts.app_login')
 @section('content')
-<body class="login-body">
+
 <div class="l-container">
     <img src="{{asset('images/SetMealShop_Logo.png')}}" class="image2">
 
@@ -36,5 +36,5 @@
     <a href="{{ route('registration')}}" class="link">ユーザー登録はこちら</a>
 </div>
 
-</body>
+
 @endsection

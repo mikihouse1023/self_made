@@ -1,11 +1,11 @@
 @props(['item', 'delete' => false])
 
-<div class="cart-item">
+<div class="cart-product">
     <div class="cart-details">
         <!-- 商品画像 -->
-
-        <img src="{{ $item->image }}" alt="{{ $item->name }}" style="object-fit: cover;" class="cart-image">
-
+        <div class="image-container">
+        <img src="{{ $item->image }}" alt="{{ $item->name }}" style="object-fit: cover;" class="image">
+        </div>
 
         <!-- 商品情報 -->
 

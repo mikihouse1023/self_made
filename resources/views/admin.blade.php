@@ -25,16 +25,10 @@
 <div class="tab-content">
 
   <div id="set_meal" class="w-tab-pane fade " style="{{ $tab === 'set_meal' ? 'display: block;' : 'display: none;' }}">
-    <div class="one-button-container"><button onclick="location.href='{{ route('admin.food_add') }}'" class="add-button">商品追加</button></div>
+    <div class="one-button-container"><button onclick="location.href='{{ route('admin.product_add') }}'" class="add-button">商品追加</button></div>
 
     <h1>■メニュー</h1>
-    <h1>定食</h1>
-    <x-item-admin :items="$set_meals" category="set_meals" />
-    <h1>丼・麺</h1>
-
-    <x-item-admin :items="$dishes" category="dishes" />
-    <h1>サイドメニュー</h1>
-    <x-item-admin :items="$side_menus" category="side_menus" />
+    <x-product-list-admin :products="$products" />
   </div>
 
   <div id="news" class="w-tab-pane" style="{{ $tab === 'news' ? 'display: block;' : 'display: none;' }}">
