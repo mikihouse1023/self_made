@@ -5,10 +5,10 @@
     'name' => 'Laravel',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://192.168.11.4:8000',
+    'url' => 'http://192.168.11.5:8000',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Tokyo',
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
@@ -443,7 +443,7 @@
       array (
         'driver' => 'local',
         'root' => '/var/www/html/storage/app/public',
-        'url' => 'http://192.168.11.4:8000/storage',
+        'url' => 'http://192.168.11.5:8000/storage',
         'visibility' => 'public',
         'throw' => false,
       ),
@@ -728,7 +728,7 @@
       2 => '127.0.0.1',
       3 => '127.0.0.1:8000',
       4 => '::1',
-      5 => '192.168.11.4:8000',
+      5 => '192.168.11.5:8000',
     ),
     'guard' => 
     array (
