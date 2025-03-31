@@ -14,8 +14,8 @@ class Sale extends Model {
         'price',
         'quantity',
         'discounted_total',
-        'product_id',      
-        'product_type',     
+        'product_id'   
+     
     ];
 
     public function user()

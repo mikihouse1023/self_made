@@ -18,7 +18,7 @@ class CouponController extends Controller
 
         // ✅ 使用可能なクーポンのみ取得
         $coupons = Coupon::where('user_id', $user->id)
-            ->whereNull('used_at') // 未使用のクーポンのみ
+            ->where('used',0) // 未使用のクーポンのみ
             ->get();
 
         // 取得済みのスタンプ情報

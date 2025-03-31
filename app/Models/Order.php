@@ -16,8 +16,9 @@ class Order extends Model
         'price',
         'quantity',
         'discounted_total',
-        'product_id',       // ← 追加
-        'product_type',     // ← 追加
+        'product_id'    
+       
+        
     ];
 
     public function user()

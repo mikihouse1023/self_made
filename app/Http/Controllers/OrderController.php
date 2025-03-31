@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Cart;
 use App\Models\Sale;
@@ -20,19 +20,33 @@ class OrderController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'ログインしてください');
         }
-
+    
+        // ✅ 予約時間が現在より過去の注文を削除（is_reserved = true のみ）
+        $expiredOrders = Order::where('user_id', Auth::id())
+            ->where('is_reserved', true)
+            ->whereNotNull('reserved_at')
+            ->where('reserved_at', '<', now())
+            ->get();
+    
+        // order_code ごとに削除
+        foreach ($expiredOrders->groupBy('order_code') as $orderCode => $group) {
+            Order::where('order_code', $orderCode)->delete();
+            OrderCode::where('order_code', $orderCode)->delete(); // QR関連も削除
+            // ※クーポン処理がある場合はここで戻すなど追加可能
+        }
+    
         // ✅ 注文一覧を取得
         $orders = Order::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('order_code');
-
+    
         // ✅ 使用済みクーポンを取得
         $appliedCoupons = Coupon::where('user_id', Auth::id())->where('used', true)->get();
-
+    
         return view('orderlist', compact('orders', 'appliedCoupons'));
     }
-
+    
     public function registerOrder()
     {
         if (!Auth::check()) {
@@ -63,8 +77,7 @@ class OrderController extends Controller
                 'price' => $item->price,
                 'quantity' => $item->quantity ?? 1,
                 'discounted_total' => $discountedTotal, // ✅ クーポン適用後の金額を保存
-                'product_id' => $item->item_id, // carts.item_id → orders.product_id
-                'product_type' => $item->category, // carts.category → orders.product_type        
+                'product_id' => $item->item_id, // carts.item_id → orders.product_id     
             ]);
         }
 
@@ -138,37 +151,38 @@ class OrderController extends Controller
             'reservation_datetime' => 'required|date|after:now',
             'guest_count' => 'required|integer|min:1'
         ]);
-
-        // 該当する注文を取得
-        $order = Order::where('order_code', $orderCode)->first();
-
-        if (!$order) {
+    
+        $orders = Order::where('order_code', $orderCode)->get();
+    
+        if ($orders->isEmpty()) {
             return redirect()->route('order.view')->with('error', '注文が見つかりません。');
         }
-
-        if ($order->is_reserved) {
+    
+        if ($orders->first()->is_reserved) {
             return redirect()->route('order.view')->with('error', 'この注文は既に予約済みです。');
         }
-
-        // 予約情報を保存
-        $order->is_reserved = true;
-        $order->reserved_at = $request->reservation_datetime;
-        $order->guest_count = $request->guest_count;
-        $order->save(); // 🔍 update() ではなく save() を使う
-
+    
+        // ← 全件に予約情報を適用
+        Order::where('order_code', $orderCode)->update([
+            'is_reserved' => true,
+            'reserved_at' => $request->reservation_datetime,
+            'guest_count' => $request->guest_count,
+        ]);
+    
         return redirect()->route('order.view')->with('success', '予約が完了しました！');
     }
+    
 
     public function cancelReservation($orderCode)
     {
-        // 指定された `order_code` に関連するすべての注文を取得
+        // 指定された order_code に関連するすべての注文を取得
         $orders = Order::where('order_code', $orderCode)->get();
 
         if ($orders->isEmpty()) {
             return redirect()->back()->with('error', 'この注文はまだ予約されていません。');
         }
 
-        // すべてのレコードの `is_reserved` を `false` にし、予約情報をクリア
+        // すべてのレコードの is_reserved を false にし、予約情報をクリア
         Order::where('order_code', $orderCode)->update([
             'is_reserved' => false,
             'reserved_at' => null,
@@ -179,32 +193,43 @@ class OrderController extends Controller
     }
 
 
+    
 
     public function generateQRCode($orderCode)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'ログインしてください');
         }
-
-
-        // QRコードのURLを `/order/scan/{orderCode}` に変更
-        $scanUrl = config('app.url') . "/order/scan/{$orderCode}";
-
-        $qrCode = QrCode::size(300)->encoding('UTF-8')->generate($scanUrl);
+    
         $order = Order::where('order_code', $orderCode)->firstOrFail();
+    
+        // ✅ 予約済みなら予約時間チェック
+        if ($order->is_reserved && $order->reserved_at) {
+            $reservedAt = Carbon::parse($order->reserved_at);
+            $now = Carbon::now();
+    
+            if ($now->lt($reservedAt->subMinutes(30))) {
+                return redirect()->route('order.view')
+                    ->with('error', '予約時間30分前に、QRコードを発行できます。');
+            }
+        }
+    
+        // QRコードの生成処理
+        $scanUrl = config('app.url') . "/order/scan/{$orderCode}";
+        $qrCode = QrCode::size(300)->encoding('UTF-8')->generate($scanUrl);
+    
         OrderCode::updateOrCreate(
             ['order_code' => $orderCode],
             ['is_scanned' => false]
         );
-
+    
         return view('qr', [
             'orderCode' => $orderCode,
             'qrCode' => $qrCode,
-            'isReserved' => $order->is_reserved, // 予約状態をビューに渡す
+            'isReserved' => $order->is_reserved,
         ]);
-        //return view('qr', compact('qrCode', 'orderCode'));
     }
-
+    
 
 
     // 「読み込み完了」ボタンを押した時の処理
@@ -250,28 +275,38 @@ class OrderController extends Controller
             return redirect()->route('order.wait', ['orderCode' => $orderCode])
                 ->with('error', 'QRコードがまだ読み込まれていません');
         }
-
+    
         // 完了処理
         $userId = Auth::check() ? Auth::id() : null;
         $orderItems = Order::where('order_code', $orderCode)->get();
-
+    
         if ($orderItems->isEmpty()) {
             return redirect()->route('order.view')->with('error', '注文が見つかりません');
         }
-
+    
         $totalAmount = $orderItems->sum(fn($item) => $item->price * $item->quantity);
+        $discountedTotal = $orderItems->first()->discounted_total; // ✅ 割引後金額を1回だけ保存
+        $first = true;
 
-        foreach ($orderItems as $order) {
-            Sale::create([
-                'user_id'    => $userId,
-                'order_code' => $order->order_code,
-                'name'       => $order->name,
-                'price'      => $order->price,
-                'quantity'   => $order->quantity,
-                'product_id' => $order->product_id,          // ← カートに入れる時点で渡しておく
-                'product_type' => $order->product_type,      // ← "set_meals", "dishes", "side_menus"など            
-            ]);
-        }
+foreach ($orderItems as $order) {
+    $saleData = [
+        'user_id'      => $userId,
+        'order_code'   => $order->order_code,
+        'name'         => $order->name,
+        'price'        => $order->price,
+        'quantity'     => $order->quantity,
+        'product_id'   => $order->product_id
+    ];
+
+    if ($first) {
+        $saleData['discounted_total'] = $discountedTotal;
+        $first = false;
+    }
+
+    Sale::create($saleData);
+}
+
+    
         // 🎯 予約情報がある場合、ドリンクバー(0円)を追加
         $reservation = $orderItems->first();
         if ($reservation->is_reserved && $reservation->guest_count > 0) {
@@ -281,22 +316,24 @@ class OrderController extends Controller
                     'order_code' => $orderCode,
                     'name'       => 'ドリンクバー',
                     'price'      => 0,
-                    'quantity'   => 1, // 1人あたり1つのドリンクバー
-
+                    'quantity'   => 1,
                 ]);
             }
         }
-
+    
+        // 注文情報を削除
         Order::where('order_code', $orderCode)->delete();
-
-        $gameCount = intdiv($totalAmount, 1000);
+    
+        // ミニゲーム関連の処理
+        $gameCount = intdiv($totalAmount, 1000); // 1000円ごとに1回
         $gameCode = rand(1000, 9999);
-
+    
         session()->put('game_count', $gameCount);
         session()->put('game_code', $gameCode);
-
+    
         return view('complete', compact('orderCode', 'gameCode', 'gameCount'));
     }
+    
 
     public function markAsScanned($orderCode)
     {
@@ -319,46 +356,52 @@ class OrderController extends Controller
             ->with('success', 'QRコードのスキャンが完了しました。');
     }
 
-    public function playMiniGame(Request $request)
-    {
-        $gameCount = session('game_count', 0);
-        $correctGameCode = session('game_code');
+  
+// OrderController.php
 
-        if ($gameCount <= 0) {
-            return redirect()->route('minigame')->with('error', 'ミニゲームの回数がありません。');
-        }
+public function playMiniGame(Request $request)
+{
+    $gameCount = session('game_count', 0);
+    $correctGameCode = session('game_code');
 
-        $inputGameCode = $request->input('game_code');
+    if ($gameCount <= 0) {
+        return redirect()->route('minigame')->with('error', 'ミニゲームの回数がありません。');
+    }
 
-        if ($inputGameCode != $correctGameCode) {
-            return redirect()->route('minigame')->with('error', '番号が間違っています。');
-        }
+    $inputGameCode = $request->input('game_code');
 
-        // 🎯 ランダムでスタンプを獲得
+    if ($inputGameCode != $correctGameCode) {
+        return redirect()->route('minigame')->with('error', '番号が間違っています。');
+    }
+
+    $totalStamps = 0;
+    $results = [];
+
+    for ($i = 0; $i < $gameCount; $i++) {
         $random = rand(1, 100);
         if ($random <= 90) {
-            $result = '🎉 大吉！スタンプ3個ゲット！ 🎉';
-            $stampsEarned = 5;
+            $results[] = '🎉 大吉！スタンプ3個ゲット！ 🎉';
+            $totalStamps += 3;
         } elseif ($random <= 95) {
-            $result = '😊 中吉！スタンプ2個ゲット！ 😊';
-            $stampsEarned = 2;
+            $results[] = '😊 中吉！スタンプ2個ゲット！ 😊';
+            $totalStamps += 2;
         } else {
-            $result = '😌 小吉！スタンプ1個ゲット！ 😌';
-            $stampsEarned = 1;
+            $results[] = '😌 小吉！スタンプ1個ゲット！ 😌';
+            $totalStamps += 1;
         }
-
-        // 🎯 ユーザーのスタンプを更新
-        $user = Auth::user();
-        $user->stamps += $stampsEarned;
-        $user->save();
-
-        // 🎯 セッション情報を更新
-        session(['game_count' => max(0, $gameCount - 1)]);
-
-        return redirect()->route('minigame')->with([
-            'game_result' => $result,
-            'stamps_earned' => $stampsEarned,
-            'game_count' => session('game_count'),
-        ]);
     }
+
+    $user = Auth::user();
+    $user->stamps += $totalStamps;
+    $user->save();
+
+    session(['game_count' => 0]); // すべてプレイしたので0にリセット
+
+    return redirect()->route('minigame')->with([
+        'game_result' => implode("\n", $results),
+        'stamps_earned' => $totalStamps,
+        'game_count' => 0,
+    ]);
+}
+
 }

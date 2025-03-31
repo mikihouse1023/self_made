@@ -62,7 +62,7 @@ class AdminUserController extends Controller
                 'post' => $validated['post'],
                 'address' => $validated['address'],
                 'password' => $validated['password'],
-                'is_admin' => 1,
+              
             ]);
         } else {
             // 一般ユーザーを登録
@@ -73,7 +73,7 @@ class AdminUserController extends Controller
                 'post' => $validated['post'],
                 'address' => $validated['address'],
                 'password' => $validated['password'],
-                'is_admin' => 0,
+              
             ]);
         }
 
@@ -154,7 +154,7 @@ class AdminUserController extends Controller
                 'post' => $validatedData['post'],
                 'address' => $validatedData['address'],
                 'password' => $user->password, // 既存パスワードを保持
-                'is_admin' => 1,
+                
             ]);
             $user->delete(); // 一般ユーザーから削除
         } elseif ($validatedData['user_type'] == 0 && $isAdmin) {
@@ -166,7 +166,7 @@ class AdminUserController extends Controller
                 'post' => $validatedData['post'],
                 'address' => $validatedData['address'],
                 'password' => $user->password, // 既存パスワードを保持
-                'is_admin' => 0,
+                
             ]);
             $user->delete(); // 管理者から削除
         } else {
@@ -178,8 +178,7 @@ class AdminUserController extends Controller
                 'post' => $validatedData['post'],
                 'address' => $validatedData['address'],
             ]);
-            $user->is_admin = $validatedData['user_type'];
-            $user->save();
+
         }
 
         \Log::info('User updated or moved successfully.');
