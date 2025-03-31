@@ -1,16 +1,16 @@
 <?php $__env->startSection('content'); ?>
 
-    <div style="display:flex;">
-        <h1 style="width:60%;margin:0 auto;">■注文内容</h1>
-    </div>
+
+        <h1>■注文内容</h1>
+
 
     <!-- カートの中身を表示 -->
     <?php if($cartItems->isEmpty()): ?>
-        <p>カートに商品がありません。</p>
+        <p class="total-price">カートに商品がありません。</p>
     <?php else: ?>
-        <ul role="list" class="w-list-unstyled">
+        
             <?php $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <li class="list-item">
+                <li class="cart-list">
                     <?php if (isset($component)) { $__componentOriginal96dfb5874ab96cc1f7fb206874c3e7f4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal96dfb5874ab96cc1f7fb206874c3e7f4 = $attributes; } ?>
 <?php $component = App\View\Components\CartItem::resolve(['item' => $item,'delete' => true] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -33,30 +33,39 @@
 <?php endif; ?>
                 </li>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </ul>
+       
+
+        <?php if(session('error')): ?>
+    <div class="error">
+        <?php echo e(session('error')); ?>
+
+    </div>
+<?php endif; ?>
 
         
-        <h3>使用可能なクーポン</h3>
+        
         <form action="<?php echo e(route('cart.applyCoupon')); ?>" method="POST">
             <?php echo csrf_field(); ?>
             <label for="coupon">クーポンを選択:</label>
-            <select name="coupon_id" id="coupon" class="form-control">
+            <select name="coupon_id" id="coupon" class="dropdown">
                 <option value="">クーポンを使用しない</option> 
                 <?php $__currentLoopData = $coupons; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $coupon): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($coupon->id); ?>"><?php echo e($coupon->code); ?> - 割引 <?php echo e($coupon->discount_value); ?>円</option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
-            <button type="submit" class="btn btn-primary mt-2">クーポンを適用</button>
+            <div class="one-button-container">
+            <button type="submit" class="applicable-button">クーポンを適用</button>
+            </div>
         </form>
-
     <?php endif; ?>
 
     
-    <div style="text-align:center; margin-top:20px;">
-        <h2>合計金額: <span id="total-price">
-            <?php echo e(number_format($discountedTotal ?? $totalPrice)); ?> 円
-        </span></h2>
-    </div>
+  
+    <h1 class="total-price-container">合計金額: <span id class="total-price">
+        <?php echo e(number_format($discountedTotal)); ?> 円
+    </span></h1>
+
+
 
     <div class="button-container" style="margin:0 auto;">
         <button class="back-button" onclick="location.href='<?php echo e(route('menu')); ?>'">戻る</button>   

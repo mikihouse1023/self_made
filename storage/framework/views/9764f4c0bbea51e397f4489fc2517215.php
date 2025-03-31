@@ -78,8 +78,8 @@ unset($__defined_vars); ?>
             <p>写真</p>
         </div>
         <div class="category_content">
-            <img class="admin_picture" src="<?php echo e(asset('storage/' . $item->picture)); ?>" alt="<?php echo e($item->name); ?>">
-            
+        <img class="admin_picture" src="<?php echo e('/storage/images/' . basename($item->picture)); ?>" alt="<?php echo e($item->name); ?>">
+
         </div>
     </div>
 

@@ -28,12 +28,12 @@ foreach ($attributes->all() as $__key => $__value) {
 
 unset($__defined_vars); ?>
 
-<div class="cart-item">
+<div class="cart-product">
     <div class="cart-details">
         <!-- 商品画像 -->
-
-        <img src="<?php echo e($item->image); ?>" alt="<?php echo e($item->name); ?>" style="object-fit: cover;" class="cart-image">
-
+        <div class="image-container">
+        <img src="<?php echo e($item->image); ?>" alt="<?php echo e($item->name); ?>" style="object-fit: cover;" class="image">
+        </div>
 
         <!-- 商品情報 -->
 

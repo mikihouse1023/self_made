@@ -1,6 +1,6 @@
 <?php $__env->startSection('content'); ?>
 
-<body class="login-body">
+
     <div class="l-container">
         <img src="<?php echo e(asset('images/SetMealShop_Logo.png')); ?>" class="image2">
 
@@ -49,7 +49,7 @@ unset($__errorArgs, $__bag); ?>
 
 
     </div>
-</body>
+
 
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app_login', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/admin_login.blade.php ENDPATH**/ ?>

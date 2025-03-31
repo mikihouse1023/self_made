@@ -2,10 +2,10 @@
 <?php $__env->startSection('content'); ?>
 <body class="login-body">
 <div class="register-container">
-    <h1>■新規ニュース登録</h1>
+    <h1>■ニュース編集</h1>
 
 <div class="w-form">
-<form action="<?php echo e(route('admin.news.add')); ?>" method="post" novalidate>
+<form action="<?php echo e(route('admin.news.update',$news->id)); ?>" method="post" novalidate>
     <?php echo csrf_field(); ?>
     <?php $__errorArgs = ['date'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -85,4 +85,4 @@ unset($__errorArgs, $__bag); ?>
 </div>
 </div>
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make('layouts.app_login', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/admin_news_add.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app_login', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/admin_news_edit.blade.php ENDPATH**/ ?>

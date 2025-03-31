@@ -16,9 +16,9 @@
 
     <!--ヘッダー画面のコンポーネント-->
 
-
+    <main class="main-content">
     <?php echo $__env->yieldContent('content'); ?>
-
+    </main>
 
 
 

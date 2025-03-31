@@ -10,13 +10,13 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\AdminLoginController;
-use App\Http\Controllers\AdminFoodController;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminNewsController;
 use App\Http\Controllers\AdminUserController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [IndexController::class, 'index'])->name('index');
-    Route::get('/news/{id}', [IndexController::class, 'newsShow'])->name('news.show'); 
+    Route::get('/news/{id}', [IndexController::class, 'newsShow'])->name('news.show');
     Route::get('/menulist', [MenuController::class, 'index'])->name('menu');
 
     Route::get('/cart', [MenuController::class, 'viewCart'])->name('cart.view');
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/index', [OrderController::class, 'index'])->name('order.index');
     Route::get('/order', [OrderController::class, 'viewOrder'])->name('order.view');
     Route::delete('/order/delete/{orderCode}', [OrderController::class, 'deleteOrder'])->name('order.delete');
-    
+
     Route::get('/order/reservation/{orderCode}', [OrderController::class, 'showReservationForm'])->name('order.reservation');
     Route::post('/order/reserve/{orderCode}', [OrderController::class, 'reserveOrder'])->name('order.reserve');
     Route::post('/order/cancel/{orderCode}', [OrderController::class, 'cancelReservation'])->name('order.cancel');
@@ -41,13 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/order/complete', function () {
         return view('complete');
     })->name('order.complete.view');
-    
+
     Route::get('/minigame', function () {
         return view('minigame');
     })->name('minigame');
-    
+
     Route::post('/minigame/play', [OrderController::class, 'playMiniGame'])->name('minigame.play');
-    
+
     Route::get('/stamps', [CouponController::class, 'viewStamps'])->name('stamps.view');
     Route::post('/stamps/redeem', [CouponController::class, 'redeemCoupon'])->name('stamps.redeem');
 });
@@ -73,18 +73,22 @@ Route::prefix('admin')->group(function () {
     Route::post('/admin_login', [AdminloginController::class, 'admin_login'])->name('admin.process');
 
     Route::middleware('auth.admin')->group(function () {
-        Route::get('/index', [AdminFoodController::class, 'index'])->name('admin.index');
-        Route::get('/food/add', [AdminFoodController::class, 'add_Food'])->name('admin.food_add');
-        Route::post('/food/store', [AdminFoodController::class, 'addFood'])->name('admin.food.add');
-
-        Route::get('/food/edit/{id}', [AdminFoodController::class, 'edit_Food'])->name('admin.food.edit');
-        Route::put('/food/update/{id}', [AdminFoodController::class, 'editFood'])->name('admin.food.update');
-
-        Route::delete('/food/delete/{id}', [AdminFoodController::class, 'deleteFood'])->name('admin.food.delete');
+        Route::get('/index', [AdminProductController::class, 'index'])->name('admin.index');
+        Route::get('/product/add', [AdminProductController::class, 'createProduct'])->name('admin.product_add');
+        Route::post('/product/store', [AdminProductController::class, 'storeProduct'])->name('admin.product.store');
+        Route::get('/product/edit/{id}', [AdminProductController::class, 'editProduct'])->name('admin.product.edit');
+        Route::put('/product/update/{id}', [AdminProductController::class, 'updateProduct'])->name('admin.product.update');
+        Route::delete('/product/delete/{id}', [AdminProductController::class, 'deleteProduct'])->name('admin.product.delete');
+        
 
         Route::get('/news/add', [AdminNewsController::class, 'news_add'])->name('admin.news_add');
         Route::post('/news/store', [AdminNewsController::class, 'addnews'])->name('admin.news.add');
         Route::post('/news/add/store', [AdminUserController::class, 'adduser'])->name('admin.news_add.store');
+        Route::get('/admin/news/{id}/edit', [AdminNewsController::class, 'editNews'])->name('admin.news.edit');
+        Route::put('/admin/news/{id}', [AdminNewsController::class, 'updateNews'])->name('admin.news.update');
+        Route::delete('/admin/news/{id}', [AdminNewsController::class, 'deleteNews'])->name('admin.news.delete');
+
+
 
         Route::get('/users', [AdminUserController::class, 'user'])->name('admin.users');
         Route::get('/user/add', [AdminUserController::class, 'user_add'])->name('admin.user_add');

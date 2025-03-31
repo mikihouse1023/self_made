@@ -21,71 +21,71 @@
 <div class="tab-content">
   <div id="set_meal" class="w-tab-pane fade " style="<?php echo e($tab === 'set_meal' ? 'display: block;' : 'display: none;'); ?>">
     <h1>■定食</h1>
-    <?php if (isset($component)) { $__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8 = $attributes; } ?>
-<?php $component = App\View\Components\Item::resolve(['items' => $set_meals] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('item'); ?>
+    <?php if (isset($component)) { $__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898 = $attributes; } ?>
+<?php $component = App\View\Components\Product::resolve(['products' => $set_meals] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('product'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\Item::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\App\View\Components\Product::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['category' => 'set_meals']); ?>
+<?php $component->withAttributes(['category' => 'set_meal']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8)): ?>
-<?php $attributes = $__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8; ?>
-<?php unset($__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8); ?>
+<?php if (isset($__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898)): ?>
+<?php $attributes = $__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898; ?>
+<?php unset($__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8)): ?>
-<?php $component = $__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8; ?>
-<?php unset($__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8); ?>
+<?php if (isset($__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898)): ?>
+<?php $component = $__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898; ?>
+<?php unset($__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898); ?>
 <?php endif; ?>
   </div>
   <div id="dish" class="w-tab-pane fade " style="<?php echo e($tab === 'dish' ? 'display: block;' : 'display: none;'); ?>">
     <h1>■丼・ラーメン</h1>
-    <?php if (isset($component)) { $__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8 = $attributes; } ?>
-<?php $component = App\View\Components\Item::resolve(['items' => $dishes] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('item'); ?>
+    <?php if (isset($component)) { $__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898 = $attributes; } ?>
+<?php $component = App\View\Components\Product::resolve(['products' => $dishes] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('product'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\Item::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\App\View\Components\Product::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['category' => 'dishes']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8)): ?>
-<?php $attributes = $__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8; ?>
-<?php unset($__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8); ?>
+<?php if (isset($__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898)): ?>
+<?php $attributes = $__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898; ?>
+<?php unset($__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8)): ?>
-<?php $component = $__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8; ?>
-<?php unset($__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8); ?>
+<?php if (isset($__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898)): ?>
+<?php $component = $__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898; ?>
+<?php unset($__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898); ?>
 <?php endif; ?>
   </div>
   <div id="side_menu" class="w-tab-pane fade" style="<?php echo e($tab === 'side_menu' ? 'display: block;' : 'display: none;'); ?>">
     <h1>■サイドメニュー</h1>
-    <?php if (isset($component)) { $__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8 = $attributes; } ?>
-<?php $component = App\View\Components\Item::resolve(['items' => $side_menus] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('item'); ?>
+    <?php if (isset($component)) { $__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898 = $attributes; } ?>
+<?php $component = App\View\Components\Product::resolve(['products' => $side_menus] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('product'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\Item::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\App\View\Components\Product::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['category' => 'side_menus']); ?>
+<?php $component->withAttributes(['category' => 'side_menu']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8)): ?>
-<?php $attributes = $__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8; ?>
-<?php unset($__attributesOriginalc6fbc7fd3916062c7e22e9452f6fbcf8); ?>
+<?php if (isset($__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898)): ?>
+<?php $attributes = $__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898; ?>
+<?php unset($__attributesOriginal4912e54b47cc540c8c40bfbaaa4ad898); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8)): ?>
-<?php $component = $__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8; ?>
-<?php unset($__componentOriginalc6fbc7fd3916062c7e22e9452f6fbcf8); ?>
+<?php if (isset($__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898)): ?>
+<?php $component = $__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898; ?>
+<?php unset($__componentOriginal4912e54b47cc540c8c40bfbaaa4ad898); ?>
 <?php endif; ?>
   </div>
 

@@ -10,6 +10,9 @@
     <h2>QRコードの読み込みを待っています...</h2>
     <p>QRコードを読み込んだら、このページは自動的に更新されます。</p>
     <p>注文コード: <strong><?php echo e($orderCode); ?></strong></p>
+    <?php if($isReserved): ?>
+        <p class="qr-notice">予約時間までにこちらのQRコードを読み込ませてください。</p>
+    <?php endif; ?>
 
     <script>
     function checkScanStatus() {
@@ -33,5 +36,4 @@
     <a href="<?php echo e(route('order.view')); ?>" class="btn btn-secondary">注文履歴に戻る</a>
 </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/qr.blade.php ENDPATH**/ ?>

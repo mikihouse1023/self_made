@@ -29,28 +29,28 @@ foreach ($attributes->all() as $__key => $__value) {
 
 unset($__defined_vars); ?>-->
 
-<div class="News">
-    <div class="News-title">
-    <a style=font-size:40px;>ニュース/News</a>
+<div class="News-container">
+    <div class="News">
+    <a>ニュース</a>
     </div>
     <div class="newsList">
         <?php $__currentLoopData = $news; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <div class="news-item">
-            <div class="date" style="background-color:#FFCC33;">
+        <div class="news-line">
+            <div class="news-item" style="background-color:#FFCC33;">
                 <p><?php echo e($item->date); ?></p>
             </div>
 
-            <div class="news-category" style=background-color:green;>
+            <div class="news-item" style=background-color:green;>
                 <p><?php echo e($item->category); ?></p>
             </div>
             <?php if($item->is_new): ?>
-            <div class="is_new" style=background-color:red;>
+            <div class="news-item" style=background-color:red;>
                 <p>NEW</p>
             </div>
             <?php endif; ?>
         </div>
-        <div class="text">
-            <div class="title">
+        <div class="news-title">
+            <div class="news-item" style=color:black;>
                 <a><?php echo e($item->title); ?></a>
             </div>
         </div>
